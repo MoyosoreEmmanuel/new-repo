@@ -33,7 +33,8 @@ const GetProducts = ({ contract }) => {
     try {
       const productList = await contract.methods.getProducts().call({ from: account });
 
-      const formattedProducts = productList.map(product => ({
+      const formattedProducts = productList.map((product, index) => ({
+        index: index,
         name: product.name,
         quantity: Number(product.quantity),
         price: Number(product.price),
@@ -63,13 +64,28 @@ const GetProducts = ({ contract }) => {
         {isLoading ? 'Loading...' : 'Get Products'}
       </button>
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-      {products && products.map((product, index) => (
-        <div key={index}>
-          <p>Name: {product.name}</p>
-          <p>Quantity: {product.quantity}</p>
-          <p>Price: {product.price}</p>
-        </div>
-      ))}
+      {products && (
+        <table>
+          <thead>
+            <tr>
+              <th>Index</th>
+              <th>Name</th>
+              <th>Quantity</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            {products.map((product) => (
+              <tr key={product.index}>
+                <td>{product.index}</td>
+                <td>{product.name}</td>
+                <td>{product.quantity}</td>
+                <td>{product.price}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };
